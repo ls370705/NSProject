@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="nsprojectmain.nsprojectmain">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nsprojectmain/build/libs/nsprojectmain.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
