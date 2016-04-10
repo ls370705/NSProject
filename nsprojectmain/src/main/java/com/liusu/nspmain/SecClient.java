@@ -27,6 +27,7 @@ import javax.crypto.SecretKey;
  * SecClient.java
  * Created by liusu on 5/4/16.
  */
+//commit
 public class SecClient {
     public static void main(String args[]){
         String hostName = "10.12.20.209";
