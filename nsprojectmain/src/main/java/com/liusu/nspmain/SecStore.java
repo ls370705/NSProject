@@ -29,8 +29,8 @@ public class SecStore {
         String message;
         String contentCP1 = "";
         String contentCP2 = "";
-        String privateKeyFileName = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate/privateServer.der";
-        String publicKeyFilename = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate/publicServer.der";
+        String privateKeyFileName = "D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\privateServer.der";
+        String publicKeyFilename = "D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\publicServer.der";
         System.out.println("Hello World");
         try{
             /**
