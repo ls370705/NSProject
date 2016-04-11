@@ -1,5 +1,4 @@
-package com.liusu.nspmain;
-
+package com.nsprojectmain;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -17,6 +16,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
@@ -36,7 +36,7 @@ public class SecClient {
         PrintWriter printWriter;
         BufferedReader bufferedReader;
 //        File file = new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\sampleData\\smallFile.txt");
-        File file = new File("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/sampleData/smallFile.txt");
+        File file = new File("/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/sampleData/smallFile.txt");
         String message;
         boolean authenticationSuccessful;
         ArrayList<String> fileInput;
@@ -56,6 +56,7 @@ public class SecClient {
              * Authentication
              */
             printWriter.println("Hello SecStore, please prove your identity");
+            System.out.println("Hello SecStore, please prove your identity");
             //message = bufferedReader.readLine();
 
 
@@ -66,6 +67,7 @@ public class SecClient {
 
 
             printWriter.println("Give me your certificate signed by CA");
+            System.out.println("Give me your certificate signed by CA");
             String certificateFile="";
             while (true){
                 String line=bufferedReader.readLine();
@@ -75,13 +77,14 @@ public class SecClient {
                 }
             }
 //            FileWriter fileWriter=new FileWriter("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt",true);
-            FileWriter fileWriter = new FileWriter("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt",true);
+            FileWriter fileWriter = new FileWriter("/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt",false);
             fileWriter.write(certificateFile);
             fileWriter.close();
 //            PublicKey publicKey = getServerPublicKey(new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt"));
-            PublicKey publicKey = getServerPublicKey(new File("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt"));
+            PublicKey publicKey = getServerPublicKey(new File("/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt"));
             if(verifyIdentity(publicKey, data)){
                 printWriter.println("Authentication successful, start the transmission");
+                System.out.println("Authentication successful, start the transmission");
                 authenticationSuccessful = true;
             }else{
                 printWriter.println("Bye!");
@@ -93,12 +96,13 @@ public class SecClient {
             /**
              * Transmission CP-1
              */
+            System.out.println("Start CP-1 Transmission");
             if(authenticationSuccessful){
                 fileInput = readFile(file);
                 for(String i: fileInput){
                     byte[] encryFile = encryptWithPublicKey(publicKey, i+"\n");
                     outputStream.writeInt(encryFile.length);
-                    outputStream.write(encryFile,0,encryFile.length);
+                    outputStream.write(encryFile, 0, encryFile.length);
                 }
                 String fin="Transmission Finished";
                 byte[] finish=fin.getBytes();
@@ -109,6 +113,7 @@ public class SecClient {
             /**
              * Transmission CP-2
              */
+            System.out.println("Start CP-1 Transmission");
             if(authenticationSuccessful){
                 fileInput = readFile(file);
                 SecretKey sessionKey = generateSessionKey();

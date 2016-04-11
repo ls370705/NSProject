@@ -1,1 +1,1 @@
-include ':app', ':nsprojectmain'
+include ':app', ':nsproject'

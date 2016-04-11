@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.liusu.nsproject">
+    package="com.nsprojectmain.liusu.nsproject">
 
     <application
         android:allowBackup="true"

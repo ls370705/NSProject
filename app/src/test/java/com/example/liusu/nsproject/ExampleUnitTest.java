@@ -1,4 +1,4 @@
-package com.example.liusu.nsproject;
+package com.nsprojectmain.liusu.nsproject;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.liusu.nsproject;
+package com.nsprojectmain.liusu.nsproject;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

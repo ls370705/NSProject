@@ -1,4 +1,4 @@
-package com.liusu.nspmain;
+package com.nsprojectmain;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -16,6 +16,7 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -40,11 +41,9 @@ public class SecStore {
         String contentCP2;
         String certFileName = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/CASignedPublicKey.crt";
 //        String privateKeyFileName = "D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\privateServer.der";
-        String privateKeyFileName = "Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate/privateServer.der";
-//        String publicKeyFileName = "D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\publicServer.der";
-        String publicKeyFileName = "Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate/publicServer.der";
-        String smallFileNameCP1 = "Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/smallFileCP1.txt";
-        String smallFileNameCP2 = "Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/smallFileCP2.txt";
+        String privateKeyFileName = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate/privateServer.der";
+        String smallFileNameCP1 = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/smallFileCP1.txt";
+        String smallFileNameCP2 = "/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/smallFileCP2.txt";
         System.out.println("Hello World");
         try{
             /**
@@ -61,6 +60,7 @@ public class SecStore {
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(privateKeyFileName)));
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             privateKey = keyFactory.generatePrivate(keySpec);
+
             /**
              * Authentication
              */
@@ -69,21 +69,26 @@ public class SecStore {
                 message = bufferedReader.readLine();
                 switch (message) {
                     case "Hello SecStore, please prove your identity":
+                        System.out.println("Hello SecStore, please prove your identity");
                         sendSignedMessage(dataOutputStream, privateKey);
                         break;
                     case "Give me your certificate signed by CA":
                         sendPublicKey(printWriter,certFileName);
+                        System.out.println("Give me your certificate signed by CA");
                         break;
                     case "Bye!":
+                        System.out.println("Bye!");
                         printWriter.close();
                         bufferedReader.close();
                         serverSocket.close();
                         clientSocket.close();
                         break;
                     case "Authentication successful, start the transmission":
+                        System.out.println("Authentication successful, start the transmission");
                         break label;
                     default:
                         printWriter.println("Invalid request, please resend.");
+                        System.out.println("Invalid request, please resend");
                         break;
                 }
             }
@@ -92,12 +97,12 @@ public class SecStore {
              * File Transmission CP-1
              */
             long cp1StartTime = System.currentTimeMillis();
+            System.out.println("Start CP-1 Transmission");
             while (true){
                 byteArrayLength = dataInputStream.readInt();
                 data = new byte[byteArrayLength];
-                dataInputStream.readFully(data,0,byteArrayLength);
-
-                if(message.equals("Transmission Finished")) break;
+                dataInputStream.readFully(data);
+                if(new String(data).equals("Transmission Finished")) break;
                 contentCP1 += decryptMessage(privateKey, data);
             }
 
@@ -106,6 +111,7 @@ public class SecStore {
              * File Transmission CP-2
              */
             long cp2StartTime = System.currentTimeMillis();
+            System.out.println("Start CP-2 Transmission");
             byteArrayLength = dataInputStream.readInt();
             data = new byte[byteArrayLength];
             dataInputStream.readFully(data,0,byteArrayLength);
@@ -115,9 +121,10 @@ public class SecStore {
                 byteArrayLength = dataInputStream.readInt();
                 data = new byte[byteArrayLength];
 //                if(message.equals("Transmission Finished")) break;
+            dataInputStream.readFully(data);
                 contentCP2 = decryptWithSessionKey(sessionKey,data);
 //            }
-            long cp2SpentTime = System.currentTimeMillis() - cp1StartTime;
+            long cp2SpentTime = System.currentTimeMillis() - cp2StartTime;
 
             /**
              * Write File
@@ -137,14 +144,15 @@ public class SecStore {
         byte[] message = encryptCipher.doFinal("I'm SecStore".getBytes());
 
         dataOutputStream.writeInt(message.length);
-        dataOutputStream.write(message,0,message.length);
+        dataOutputStream.write(message, 0, message.length);
     }
     public static void sendPublicKey(PrintWriter printWriter, String certFileName) throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(new File(certFileName)));
         String temp;
         String content = "";
-        while((temp = reader.readLine()) != null) certFileName += temp;
-
+        while((temp = reader.readLine()) != null){
+            content += temp + "\n";
+        }
         printWriter.println(content);
     }
     public static String decryptMessage(PrivateKey privateKey, byte[] message) throws Exception{
@@ -157,7 +165,8 @@ public class SecStore {
         Cipher decryptCipher = Cipher.getInstance("RSA");
         decryptCipher.init(Cipher.DECRYPT_MODE, privateKey);
 
-        return new SecretKeySpec(input,0,input.length,"RSA");
+        byte[] decryptedSessionKey = decryptCipher.doFinal(input);
+        return new SecretKeySpec(decryptedSessionKey,0,decryptedSessionKey.length,"AES");
     }
 
     public static String decryptWithSessionKey(SecretKey secretKey, byte[] input) throws Exception {
@@ -169,5 +178,6 @@ public class SecStore {
     public static void writeFile(String content, String fileName) throws Exception{
         PrintWriter fileWriter = new PrintWriter(fileName,"UTF-8");
         fileWriter.println(content);
+        fileWriter.close();
     }
 }
