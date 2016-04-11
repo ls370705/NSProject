@@ -35,8 +35,8 @@ public class SecClient {
         Socket clientSocket;
         PrintWriter printWriter;
         BufferedReader bufferedReader;
-        File file = new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\sampleData\\smallFile.txt");
-        //File certFile = new File("/Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/CASignedPublicKey.crt");
+//        File file = new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\sampleData\\smallFile.txt");
+        File file = new File("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/sampleData/smallFile.txt");
         String message;
         boolean authenticationSuccessful;
         ArrayList<String> fileInput;
@@ -74,11 +74,12 @@ public class SecClient {
                     break;
                 }
             }
-            FileWriter fileWriter=new FileWriter("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt",true);
+//            FileWriter fileWriter=new FileWriter("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt",true);
+            FileWriter fileWriter = new FileWriter("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt",true);
             fileWriter.write(certificateFile);
             fileWriter.close();
-            PublicKey publicKey = getServerPublicKey(new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt"));
-
+//            PublicKey publicKey = getServerPublicKey(new File("D:\\Study\\Term 5\\Computer System Engineering\\NSProjectRelease\\Certificate.crt"));
+            PublicKey publicKey = getServerPublicKey(new File("Users/liusu/Documents/Liu Su/Term 5/Computer System Engineering/NS Programming Assignment/Certificate.crt"));
             if(verifyIdentity(publicKey, data)){
                 printWriter.println("Authentication successful, start the transmission");
                 authenticationSuccessful = true;
